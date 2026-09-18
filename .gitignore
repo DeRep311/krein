@@ -1,0 +1,25 @@
+# Binaries
+/bin/
+/dist/
+*.exe
+*.test
+
+# Go build/test artifacts
+*.out
+*.prof
+
+# Dependency directories
+vendor/
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# OS / editor cruft
+.DS_Store
+*.swp
+
+# Local sockets / runtime state (orchd/execd)
+*.sock
+.krein/

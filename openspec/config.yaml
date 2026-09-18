@@ -1,0 +1,64 @@
+schema: spec-driven
+
+context: |
+  Project: Krein — lightweight multi-agent orchestrator daemon.
+  Tech stack: Go (go.mod, standard toolchain).
+  Architecture: two cooperating processes, `orchd` + `execd`, over a local socket.
+  Wraps coding-agent CLIs (Claude Code, Google Antigravity CLI, OpenAI Codex) as
+  subprocess adapters; speaks Google's A2A protocol for cross-instance federation;
+  uses MCP for local tool extension.
+  Testing: `go test ./...`, gofmt, go vet.
+  Style: standard Go conventions (gofmt-formatted, go vet clean).
+  Status: bootstrap — empty repo, no code committed yet.
+
+strict_tdd: true
+
+testing:
+  strict_tdd: true
+  detected: 2026-09-18
+  note: >
+    Bootstrap default. No go.mod exists yet; `go test ./...` is the intended
+    workspace-level test command once the module is initialized. Zero projects
+    are currently discoverable since the repo has no files. Revisit this
+    config once `go.mod` and the first package land, and adjust the command
+    if a more specific per-package convention emerges.
+  projects:
+    - path: "."
+      stack: Go (planned)
+      test_command: "go test ./..."
+      framework: "testing (stdlib)"
+      unit: pending
+      integration: pending
+      e2e: pending
+      coverage_command: "go test ./... -cover"
+      linter: "go vet ./..."
+      type_checker: "n/a (Go is statically typed at build time)"
+      formatter: "gofmt -l ."
+
+rules:
+  proposal:
+    - Include rollback plan for risky changes
+    - Note protocol-surface impact (A2A wire format, MCP tool contracts, orchd/execd socket protocol) when a change touches it
+  specs:
+    - Use Given/When/Then for scenarios
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)
+    - Keep `orchd` and `execd` responsibilities and their socket contract explicit in any spec that touches process boundaries
+  design:
+    - Include sequence diagrams for complex flows (especially orchd/execd IPC and A2A federation handshakes)
+    - Document architecture decisions with rationale
+    - Document subprocess-adapter lifecycle (spawn, handshake, stream, teardown) for any new coding-agent CLI adapter
+  tasks:
+    - Group by phase, use hierarchical numbering
+    - Keep tasks completable in one session
+  apply:
+    guidelines:
+      - Follow existing code patterns
+      - Follow standard Go idioms; run `gofmt` and `go vet` before considering a task done
+    tdd: true
+    test_command: "go test ./..."
+  verify:
+    test_command: "go test ./..."
+    build_command: "go build ./..."
+    coverage_threshold: 0
+  archive:
+    - Warn before merging destructive deltas
